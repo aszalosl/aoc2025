@@ -1,6 +1,5 @@
 require "minctest"
-require "BigNum"
-local bigsum = BigNum.new(0)
+local sum = 0
 
 local function concatString(a, b)
    local c = a .. b
@@ -43,17 +42,16 @@ local function handleInterval(pair)
    local first_end = tonumber(string.sub(pair, (b - 1) // 2 + 1, b - 1))
    local second = tonumber(string.sub(pair, b + 1))
    local result = searchInvalid(first_begin, first_end, 10 ^ l, second)
-   BigNum.add(bigsum, BigNum.new(result), bigsum)
+   sum = result + sum
 end
 
 local function part1(filename)
    io.input(filename)
    local line = io.read("l")
    for pair in string.gmatch(line, "[0-9-]+") do
-      print("> " .. pair)
       handleInterval(pair)
    end
-   return tostring(bigsum)
+   print("Part 1: ", sum|0)
 end
 
 
@@ -69,11 +67,11 @@ lrun("Invalid", function()
    lequal(searchInvalid(2, 93, 100, 351), 0);
 end)
 
---print(lresults())
--- print(part1("test02.txt"))
---print(part1("input02.txt"))
 
-local sum = 0
+-- part1("test02.txt"))
+part1("input02.txt")
+
+sum = 0
 
 local function checkNumber(s)
    local sLen = #s
@@ -81,9 +79,7 @@ local function checkNumber(s)
    while i <= sLen // 2 + 1 do
       local left1, right2 = string.sub(s, 1, sLen - i + 1), string.sub(s, i)
       local left2, right1 = string.sub(s, sLen - i + 2), string.sub(s, 1, i - 1)
-      -- print(left1 .. " - " .. right2 .. ' and ' .. left2 .. ' - ' .. right1)
       if (left1 == right2) and (left2 == right1) then
-         print(s)
          return tonumber(s)
       end
       i = i + 1
@@ -106,7 +102,6 @@ end)
 local function searchInterval(first, second)
    for number = first, second do
       local s = tostring(number|0)
-      -- print(s)
       sum = sum + checkNumber(s)
    end
 end
@@ -119,12 +114,13 @@ local function part2(filename)
       local b, _ = string.find(pair, "-")
       local first = string.sub(pair, 1, b - 1)
       local second = string.sub(pair, b + 1)
-      print(first, " - ", second)
       searchInterval(first, second)
    end
-   print(sum)
+   print("Part 2: ", sum)
 end
 
--- print(lresults())
--- print(part2("test02.txt"))
-print(part2("input02.txt"))
+
+-- part2("test02.txt")
+part2("input02.txt")
+
+-- lresults()
